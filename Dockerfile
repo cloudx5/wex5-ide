@@ -6,6 +6,8 @@ ENV PHPIZE_DEPS \
 		g++ \
 		gcc \
 		libc-dev \
+		libjpeg-dev \
+		libpng-dev \
 		make \
 		pkg-config \
 		re2c
@@ -28,7 +30,7 @@ RUN apt-get update && apt-get install -y apache2-bin apache2.2-common --no-insta
 RUN rm -rf /var/www/html && mkdir -p /var/lock/apache2 /var/run/apache2 /var/log/apache2 /var/www/html && chown -R www-data:www-data /var/lock/apache2 /var/run/apache2 /var/log/apache2 /var/www/html
 
 # Apache + PHP requires preforking Apache for best results; add proxy proxy_http for wex5
-RUN a2dismod mpm_event && a2enmod mpm_prefork proxy proxy_http
+RUN a2dismod mpm_event && a2enmod mpm_prefork proxy proxy_http proxy_wstunnel
 
 RUN mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.dist && rm /etc/apache2/conf-enabled/* /etc/apache2/sites-enabled/*
 COPY apache2.conf /etc/apache2/apache2.conf
