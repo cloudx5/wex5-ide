@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t hub.cloudx5.com/justep/wex5-ide:1 ./
+docker build -t hub.cloudx5.com/justep/wex5-ide:2 ./
