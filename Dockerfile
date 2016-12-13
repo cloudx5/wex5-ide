@@ -102,5 +102,21 @@ RUN docker-php-ext-install \
         mysqli\
         pdo_mysql
 
+# https://github.com/nodejs/docker-node
+RUN groupadd --gid 1000 node \
+  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+
+ENV NPM_CONFIG_LOGLEVEL info
+ENV NODE_VERSION 6.9.1
+ENV NPM_REGISTRY http://cnpmjs.cnpm:7001
+
+# COPY node-v$NODE_VERSION-linux-x64.tar.gz /tmp/node-v$NODE_VERSION-linux-x64.tar.gz
+RUN curl -SL "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" -o /tmp/node-v$NODE_VERSION-linux-x64.tar.gz \
+  && tar -xvf "/tmp/node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+  && npm install -g cnpm --registry=https://registry.npm.taobao.org \
+  && cnpm set registry=$NPM_REGISTRY \
+  && rm /tmp/node-v$NODE_VERSION-linux-x64.tar.gz
+
 EXPOSE 80
 CMD ["wex5"]
